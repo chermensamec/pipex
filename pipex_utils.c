@@ -6,7 +6,7 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:17:22 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/07 21:01:21 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/07 21:33:39 by onelda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	*find_script(char *paths[], char *command)
 	i = 0;
 	while (paths[i])
 	{
-		printf("%s\n", paths[i]);
 		tmp = paths[i];
 		paths[i] = ft_strjoin(paths[i], "/");
 		free(tmp);
@@ -44,7 +43,6 @@ char	*get_path(char *envp[], char *command)
 
 	i = 0;
 	path_line = 0;
-	printf("11\n");
 	while (!path_line)
 		path_line = ft_strnstr(*(envp++), "PATH", 5);	
 	paths = ft_split(path_line + 5, ':');

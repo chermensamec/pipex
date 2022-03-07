@@ -6,7 +6,7 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:17:19 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/07 21:10:56 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/07 21:34:11 by onelda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,13 @@ int main(int argc, char *argv[], char *envp[])
 	pid1 = fork();
 	if (pid1 == 0)
 	{
-		//dup2(one, STDIN_FILENO);
-		//dup2(fd[1], STDOUT_FILENO);
+		dup2(one, STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
 		paths = get_path(envp, argv[2]);
-		printf("main %s\n", paths);
 		close(fd[0]);
-		printf("main %s\n",  ft_split(argv[2], ' ')[0]);
-		execve(paths, test, envp);
+		execve(paths, ft_split(argv[2], ' '), envp);
 	}
-	/*pid2 = fork();
+	pid2 = fork();
 	if (pid2 == 0)
 	{
 		paths = get_path(envp, argv[3]);
@@ -45,7 +43,7 @@ int main(int argc, char *argv[], char *envp[])
 		close(fd[1]);
 		//printf("dasda");
 		execve(paths, ft_split(argv[3], ' '), envp);
-	}*/
-	//waitpid(pid1, NULL, 0);
+	}
+	waitpid(pid1, NULL, 0);
 	waitpid(pid1, NULL, 0);
 }
