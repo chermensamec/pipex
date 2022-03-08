@@ -6,44 +6,82 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:17:19 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/07 21:34:11 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/08 23:06:16 by chermen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include "pipex.h"
 
+void child_process1(char *file, int *fd, char *envp[], char *command)
+{
+	int	fd_file;
+	char	*path;
+
+	fd_file = open(file, O_RDONLY, 0777);
+	if(fd_file < 0)
+		return ;
+	dup2(fd_file, STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
+	path = get_path(envp, command);	
+	printf("%s\n", path);
+	close(fd[0]);
+	if (execve(path, ft_split(command, ' '), envp) == -1)
+		exit(1);
+}
+
+void child_process2(char *file, int *fd, char *envp[], char *command)
+{
+	int	fd_file;
+	char	*path;
+
+	fd_file = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if(fd_file < 0)
+		exit(1);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(fd_file, STDOUT_FILENO);
+	path = get_path(envp, command);
+	close(fd[1]);	
+	printf("%s\n", path);
+	if(execve(path, ft_split(command, ' '), envp) == -1)
+		exit(1);
+}
 int main(int argc, char *argv[], char *envp[])
 {
-	char	*paths;
 	int 	fd[2];
-	char	**tmp;
-	int	one, second;
-	char *test[3] = {"ls", "-l", NULL};
-	pid_t	pid1, pid2;
-	pipe(fd);
-	one = open("1.txt", O_RDONLY, 0777);
-	second = open("2.txt", O_WRONLY | O_RDONLY | O_TRUNC, 0777);
-	printf("%d %d\n", fd[0], fd[1]);
+	pid_t	pid1;
+	pid_t	pid2;
+	printf("%d\n", getpid());
+	if (pipe(fd) == -1)
+		exit(1);
 	pid1 = fork();
+	if (pid1  < 0)
+		exit(1);
 	if (pid1 == 0)
 	{
-		dup2(one, STDIN_FILENO);
-		dup2(fd[1], STDOUT_FILENO);
-		paths = get_path(envp, argv[2]);
-		close(fd[0]);
-		execve(paths, ft_split(argv[2], ' '), envp);
+		printf("if1 %d\n", getpid());
+		child_process1(argv[1], fd, envp, argv[2]);		
+		exit(1);
+	}
+	else 
+	{
+		printf("else1 %d\n", getpid());
+		printf("%d\n", getpid());
+		waitpid(pid1, NULL, 0);
 	}
 	pid2 = fork();
-	if (pid2 == 0)
+	if (pid2 < 0)
+		exit(1);
+	if (pid2 == 0)	
 	{
-		paths = get_path(envp, argv[3]);
-		dup2(fd[0], STDIN_FILENO);
-		dup2(second, STDOUT_FILENO);	
-		close(fd[1]);
-		//printf("dasda");
-		execve(paths, ft_split(argv[3], ' '), envp);
+		printf("if2 %d\n", getpid());
+		child_process2(argv[4], fd, envp, argv[3]);
+		exit(1);
 	}
-	waitpid(pid1, NULL, 0);
-	waitpid(pid1, NULL, 0);
+	else 
+	{
+		printf("else2 %d\n", getpid());
+		printf("%d\n", getpid());
+		//waitpid(pid2, NULL, 0);	
+	}
 }
