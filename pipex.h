@@ -6,7 +6,7 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:20:01 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/09 13:22:19 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/09 17:58:19 by onelda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <errno.h>
+# include <string.h> 
 
 char	*get_path(char *envp[], char *comand);
 int		ft_strlen(const char *s);
