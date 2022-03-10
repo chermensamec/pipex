@@ -6,7 +6,7 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:17:19 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/09 18:59:50 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/10 22:28:22 by onelda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_error(int err_num)
 	if (err_num == 0)
 	{
 		perror("command not found");	
-		exit(128);
+		exit(-1);
 	}
 	else if (err_num == 1)
 	{
@@ -70,8 +70,9 @@ int	child_process1(char *file, int *fd, char *envp[], char *command)
 	dup2(fd_file, STDIN_FILENO);
 	dup2(fd[1], STDOUT_FILENO);
 	path = get_path(envp, command);	
-	//close(fd[0]);
-	execve(path, ft_split(command, ' '), envp);
+	close(fd[0]);
+	execve(path, ft_split(command, ' '), envp);	
+	close(fd[0]);
 	return (0);
 }
 
@@ -86,8 +87,9 @@ int	child_process2(char *file, int *fd, char *envp[], char *command)
 	dup2(fd[0], STDIN_FILENO);
 	dup2(fd_file, STDOUT_FILENO);
 	path = get_path(envp, command);
-	//close(fd[1]);	
-	execve(path, ft_split(command, ' '), envp);
+	close(fd[1]);	
+	execve(path, ft_split(command, ' '), envp);	
+	close(fd[0]);	
 	return (0);
 }
 int	main(int argc, char *argv[], char *envp[])
@@ -95,7 +97,8 @@ int	main(int argc, char *argv[], char *envp[])
 	int 	fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
-	
+	int 	status[2];
+
 	if (argc == 5)	
 	{
 		if (pipe(fd) == -1)
@@ -104,16 +107,20 @@ int	main(int argc, char *argv[], char *envp[])
 		if (pid1  < 0)
 			ft_error(3);
 		if (pid1 == 0)
-			ft_error(child_process1(argv[1], fd, envp, argv[2]));		
-		waitpid(pid1, NULL, 0);
-		close(fd[1]);
+			ft_error(child_process1(argv[1], fd, envp, argv[2]));	
 		pid2 = fork();
 		if (pid2 < 0)
 			ft_error(3);
 		if (pid2 == 0)	
-			ft_error(child_process2(argv[4], fd, envp, argv[3]));
-		waitpid(pid2, NULL, 0);	
-		close(fd[0]);
+			ft_error(child_process2(argv[4], fd, envp, argv[3]));	
+		close(fd[0]);	
+		close(fd[1]);
+		waitpid(&status[0]);
+		waitpid(&status[1]);	
+		if (WIFEXITED(status[0]))
+			return (WEXITSTATUS(status[0]));	
+		if (WIFEXITED(status[0]))
+			return (WEXITSTATUS(status[0]));
 	}
 	else 
 		ft_error(4);
