@@ -6,7 +6,7 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:17:22 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/10 21:53:57 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:03:18 by onelda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*get_path(char *envp[], char *command)
 	int		i;
 
 	if (!access(ft_split(command, ' ')[0], X_OK))
-		return (paths[i]);
+		return (ft_split(command, ' ')[0]);
 	i = 0;
 	path_line = 0;
 	while (!path_line)
