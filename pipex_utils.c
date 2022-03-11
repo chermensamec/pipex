@@ -6,17 +6,27 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:17:22 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/11 15:03:18 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/12 01:59:35 by chermen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+void	ft_free_path(char **paths)
+{
+	int	i;
+
+	i = 0;
+	while (paths[i])
+		free(paths[i++]);
+	free(paths);
+}
+
 char	*find_script(char *paths[], char *command)
 {
 	int		i;
-	char	*path;
 	char	*tmp;
+	char	*res;
 
 	i = 0;
 	while (paths[i])
@@ -28,25 +38,28 @@ char	*find_script(char *paths[], char *command)
 		paths[i] = ft_strjoin(paths[i], command);
 		free(tmp);
 		if (!access(paths[i], X_OK))
-			return (paths[i]);
-		//free(paths[i]);
+		{
+			res = ft_strdup(paths[i]);
+			return (res);
+		}
 		i++;
 	}
+	ft_free_path (paths);
 	return (NULL);
 }
 
-char	*get_path(char *envp[], char *command)
+char	*get_path(char *envp[], char **pars_com)
 {
 	char	*path_line;
 	char	**paths;
 	int		i;
 
-	if (!access(ft_split(command, ' ')[0], X_OK))
-		return (ft_split(command, ' ')[0]);
+	if (!access(pars_com[0], X_OK))
+		return (pars_com[0]);
 	i = 0;
 	path_line = 0;
 	while (!path_line)
-		path_line = ft_strnstr(*(envp++), "PATH", 5);	
+		path_line = ft_strnstr(*(envp++), "PATH", 5);
 	paths = ft_split(path_line + 5, ':');
-	return (find_script(paths, ft_split(command, ' ')[0]));
+	return (find_script(paths, pars_com[0]));
 }

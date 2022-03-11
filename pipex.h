@@ -6,7 +6,7 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:20:01 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/09 17:58:19 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/12 01:59:14 by chermen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@
 # include <errno.h>
 # include <string.h> 
 
-char	*get_path(char *envp[], char *comand);
+char	*get_path(char *envp[], char **path_com);
 int		ft_strlen(const char *s);
 char	**ft_split(char const *s, char c);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strdup(const char *s);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 #endif

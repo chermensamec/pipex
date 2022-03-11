@@ -1,6 +1,6 @@
 NAME = pipex
 SRC =  ft_split.c ft_strlen.c ft_strjoin.c ft_strnstr.c\
-       ft_strlcpy.c main.c pipex_utils.c
+       ft_strlcpy.c main.c pipex_utils.c ft_strdup.c
 
 CC = gcc
 
