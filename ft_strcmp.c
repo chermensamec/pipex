@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/12 15:05:13 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/12 15:05:14 by onelda           ###   ########.fr       */
+/*   Created: 2022/03/12 16:29:54 by onelda            #+#    #+#             */
+/*   Updated: 2022/03/12 16:29:56 by onelda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-char	*ft_strdup(const char *s)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	*res;
+	int	i;
 
-	res = malloc(sizeof(char) * ft_strlen(s) + 1);
-	if (!res)
-		return (0);
-	ft_strlcpy(res, s, ft_strlen(s) + 1);
-	return (res);
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
+		i++;
+	return (s1[i] - s2[i]);
 }
