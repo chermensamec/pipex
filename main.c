@@ -6,7 +6,7 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:17:19 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/12 15:40:25 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/13 16:09:11 by onelda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	child_process1(char *file, int *fd, char *envp[], char *command)
 	execve(path, pars_com, envp);
 	close(fd[1]);
 	free(path);
-	while (pars_com[i])
-		free(pars_com[i++]);
+	//while (pars_com[i])
+	//	free(pars_com[i++]);
 	free(pars_com);
 	ft_error(0);
 }
