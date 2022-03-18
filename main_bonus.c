@@ -15,77 +15,48 @@ void	ft_putnbr(int nb)
 	write(2, &c, 1);
 }
 
-void	child_process(char *argv, char **envp, int in_file, int out_file)
+void child_process(char *argv, char **envp)
 {
-	char 	*path;
-	path = get_path(envp, ft_split(argv, ' '));
-	dup2(in_file, STDIN_FILENO);	
-	dup2(out_file, STDOUT_FILENO);
-	if (path == 0)
-		exit (1);		
-	ft_putnbr(out_file);
-	execve(path, ft_split(argv, ' '), envp);
+
+	int		fd[2];
+	pid_t	pid;
+	int		status;	
+	if (pipe(fd) == -1)
+		exit(1);
+	pid = fork();	
+	if (pid == -1)
+		exit(1);
+	if (pid == 0)
+	{
+		close(fd[0]);
+		dup2(fd[1], STDOUT_FILENO);
+		execve(get_path(envp, ft_split(argv, ' ')), ft_split(argv, ' '), envp);
+		write(2, "Eror execve\n", 12);
+		exit(1);
+	}
+	waitpid(pid, &status, 0);
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
 }
 
 int main(int argc, char **argv, char **envp)
 {
-	int	*fd;
-	int	i;
-	char	*path;
-	int	fd_file;
-	pid_t	pid;
+	int fd_file[2];
+	int i;
 
 	i = 2;
-	fd = malloc(sizeof(int) * (argc - 4) * 2);
-
-	if (!fd)
-		return (1);
-	if(pipe(fd) == -1)
-		exit(1);
-	if (argc >= 5)
+	if (ft_strnstr(argv[1], "here_doc", 8))
 	{
-		if (ft_strnstr(argv[1], "here_doc", 8))
-		{
-			read_from_terminal(argv[2]);
-		}
-		while (i != argc - 2)
-		{
-
-			fd_file = open(argv[1], O_RDONLY , 0777);
-			pid = fork();
-			if (pid < 0)
-				exit(1);
-			if (pid == 0)
-			{
-				if (i == 2)
-					child_process(argv[i], envp, fd_file, *fd);	
-				else
-					
-					child_process(argv[i], envp, *(fd + (i - 2) * 2), *(fd + (i - 2) * 2 + 1));	
-			}
-				waitpid(pid, NULL, 0);	
-			i++;
-		}
-		pid = fork();
-
-		if (pid == 0)
-		{
-			fd_file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			path = get_path(envp, ft_split(argv[argc - 2], ' '));
-			
-			ft_putnbr((argc - 4) * 2 - 1);
-			dup2(fd[(argc - 4) * 2 - 1], STDIN_FILENO);
-			dup2(fd_file, STDOUT_FILENO);
-			close(fd[1]);
-			execve(path, ft_split(argv[argc - 2], ' '), envp);	
-			ft_putnbr(pid);
-		}
-		close(fd[0]);
-		close(fd[1]);
-		//close(fd[2]);
-		//close(fd[3]);
-		write(2, "Hellow_mai4\n", 12);
-		waitpid(pid, NULL, 0);
+		read_from_terminal(argv[2]);
 	}
-	// читаем get_net_line'ом записываем это в pipe 1 потом делаем этот pipe stdin и дальше как в mandatory и все
+	else 
+	{
+		fd_file[0] = open(argv[1], O_RDONLY, 0644);
+		dup2(fd_file[0], STDIN_FILENO);
+	}
+	while (i != argc - 2)
+		child_process(argv[i++], envp);	
+	fd_file[1] = open(argv[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	dup2(fd_file[1], STDOUT_FILENO);
+	execve(get_path(envp, ft_split(argv[i], ' ')), ft_split(argv[i], ' '), envp);
 }
