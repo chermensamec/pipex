@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:20:01 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/13 18:12:49 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/15 20:47:42 by chermen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,5 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	*get_next_line(int fd);
+char	*ft_strchr(const char *s, int c);
 #endif

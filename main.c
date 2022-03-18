@@ -6,7 +6,7 @@
 /*   By: onelda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 20:17:19 by onelda            #+#    #+#             */
-/*   Updated: 2022/03/13 16:09:11 by onelda           ###   ########.fr       */
+/*   Updated: 2022/03/15 20:30:10 by chermen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	child_process2(char *file, int *fd, char *envp[], char *command)
 	int		i;
 
 	i = 0;
-	fd_file = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	fd_file = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_file < 0)
 		ft_error(1);
 	dup2(fd[0], STDIN_FILENO);
