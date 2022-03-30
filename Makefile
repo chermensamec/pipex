@@ -4,8 +4,8 @@ SRC =  ft_split.c ft_strlen.c ft_strjoin.c ft_strnstr.c\
        ft_strlcpy.c main.c pipex_utils.c ft_strdup.c
 
 SRC_BONUS = main_bonus.c read_from_terminal.c ft_split.c\
-	ft_strlen.c ft_strjoin.c ft_strnstr.c ft_strlcpy.c\
-	ft_strdup.c get_next_line.c pipex_utils.c \
+	ft_strlen.c ft_strjoin.c ft_strncmp.c ft_strlcpy.c\
+	ft_strdup.c get_next_line.c pipex_utils.c ft_strnstr.c\
 	ft_strchr.c
 
 CC = gcc

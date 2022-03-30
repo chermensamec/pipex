@@ -18,9 +18,9 @@ void	ft_putnbr(int nb)
 void child_process(char *argv, char **envp)
 {
 
-	int		fd[2];
+	int	fd[2];
 	pid_t	pid;
-	int		status;	
+	int	status;
 	if (pipe(fd) == -1)
 		exit(1);
 	pid = fork();	
@@ -28,8 +28,8 @@ void child_process(char *argv, char **envp)
 		exit(1);
 	if (pid == 0)
 	{
+		dup2(fd[1], STDOUT_FILENO);	
 		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
 		execve(get_path(envp, ft_split(argv, ' ')), ft_split(argv, ' '), envp);
 		write(2, "Eror execve\n", 12);
 		exit(1);
@@ -47,7 +47,8 @@ int main(int argc, char **argv, char **envp)
 	i = 2;
 	if (ft_strnstr(argv[1], "here_doc", 8))
 	{
-		read_from_terminal(argv[2]);
+		read_from_terminal(argv[2]);	
+		i = 3;
 	}
 	else 
 	{
@@ -59,4 +60,6 @@ int main(int argc, char **argv, char **envp)
 	fd_file[1] = open(argv[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	dup2(fd_file[1], STDOUT_FILENO);
 	execve(get_path(envp, ft_split(argv[i], ' ')), ft_split(argv[i], ' '), envp);
+	close(fd_file[0]);
+	close(fd_file[1]);
 }
