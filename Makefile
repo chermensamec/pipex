@@ -1,5 +1,5 @@
-NAME = pipex
-BONUS = pipex_bonus
+NAME = pipex_m
+BONUS = pipex
 SRC =  ft_split.c ft_strlen.c ft_strjoin.c ft_strnstr.c\
        ft_strlcpy.c main.c pipex_utils.c ft_strdup.c
 

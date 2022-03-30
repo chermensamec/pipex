@@ -9,12 +9,12 @@ char	**realloc_for_char_arr(char **old, int size)
 	new = malloc(sizeof(char *) * size + 1);
 	if (!new)
 		exit (1);
-
 	while (i < size)
 	{
 		new[i] = old[i];	
 		i++;
 	}
+	free(old);
 	return (new);
 }
 
@@ -47,6 +47,7 @@ void read_from_terminal(char *limiter)
 	while (i < size)
 	{
 		write(fd[1], arr[i], ft_strlen(arr[i]));
+		free(arr[i]);
 		i++;
 	}
 	dup2(fd[0], STDIN_FILENO);
